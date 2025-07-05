@@ -57,7 +57,7 @@ class SegmentationWriter:
         """
 
         if output_path.suffix != '.tif':
-            output_path = output_path / '.tif' 
+            output_path = output_path.with_suffix('.tif')
 
         self._writer = mir.MultiResolutionImageWriter()
         self._writer.openFile(str(output_path))
@@ -93,7 +93,7 @@ class DetectionWriter:
         """
 
         if output_path.suffix != '.json':
-            output_path = output_path / '.json' 
+            output_path = output_path.with_suffix('.json')
 
 
         self._output_path = output_path
@@ -141,7 +141,7 @@ class TilsScoreWriter:
         """
 
         if output_path.suffix != '.json':
-            output_path = output_path / '.json' 
+            output_path = output_path.with_suffix('.json')
 
         self._output_path = output_path
         self._tils_score = None

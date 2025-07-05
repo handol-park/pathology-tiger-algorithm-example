@@ -31,11 +31,12 @@ docker run --rm \
 echo "Checking output files..."
 docker run --rm \
         -v tiger-output:/output/ \
-        python:3.8-slim \
-        python -m json.tool $DETECTION_FILE; \
-        /bin/bash; \
-        [[ -f $SEGMENTATION_FILE ]] || printf 'Expected file %s does not exist!\n' "$SEGMENTATION_FILE"; \
-        [[ -f $TILS_SCORE_FILE ]] || printf 'Expected file %s does not exist!\n' "$TILS_SCORE_FILE"; \
+        python:3.8-slim bash -c " \
+        echo 'Validating JSON format of ${DETECTION_FILE}' && \
+        python -m json.tool ${DETECTION_FILE} > /dev/null && \
+        echo 'Checking for ${SEGMENTATION_FILE}' && test -f ${SEGMENTATION_FILE} && \
+        echo 'Checking for ${TILS_SCORE_FILE}' && test -f ${TILS_SCORE_FILE} || \
+        (echo 'Output file validation failed!' && exit 1)"
 
 echo "Removing volume..."
 docker volume rm tiger-output
